@@ -79,8 +79,9 @@ typedef struct		s_general
 	t_vec		cam_dir;
 	t_vec		ray_dir;
 	t_vec		norm;
-	t_vec		normraydist;
+	float		normraydist;
 	t_vec		dist;
+	t_vec   raylightdist;
 	t_vec		raylightdir;
 	t_vec		intensitylight;
 	t_obj		plan;

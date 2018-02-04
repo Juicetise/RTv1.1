@@ -14,13 +14,19 @@
 
 void	light(t_general *all, float d, float lambert)
 {
-  lambert = ft_clamp(lambert * 4.0 * d, 0.0, 1.0);
+  float a;
+
+  a = d;
+  //lambert = ft_clamp(lambert * 4.0 * d, 0.0, 1.0);
 	all->finalcolor.r = lambert *
-		(all->objcolor.r / 255) * (all->spot->color.r / 255);
+		((all->objcolor.r / 255) * (all->spot->color.r / 255)) * 255;
 	all->finalcolor.g = lambert *
-		(all->objcolor.g / 255) * (all->spot->color.g / 255);
+		((all->objcolor.g / 255) * (all->spot->color.g / 255)) * 255;
 	all->finalcolor.b = lambert *
-		(all->objcolor.b / 255) * (all->spot->color.b / 255 );
+		((all->objcolor.b / 255) * (all->spot->color.b / 255 )) * 255;
+  all->finalcolor.r = ft_clamp(all->finalcolor.r, 0, 255);
+  all->finalcolor.g = ft_clamp(all->finalcolor.g, 0, 255);
+  all->finalcolor.b = ft_clamp(all->finalcolor.b, 0, 255);
 }
 
 int		ft_shadow(t_general *all, t_vec pos, int id)
@@ -54,7 +60,49 @@ int		ft_shadow(t_general *all, t_vec pos, int id)
 
 void	lambert(t_general *all, int x, int y, int id)
 {
-	t_vec position;
+  t_vec impact;
+  t_vec dist;
+  float norme;
+  float lambert;
+  float temp;
+  float d;
+
+  d = 0;
+  impact.x = all->oray.x + all->t * all->dray.x;
+	impact.y = all->oray.y + all->t * all->dray.y;
+	impact.z = all->oray.z + all->t * all->dray.z;
+  dist = norm(all, impact, id);
+  ft_vectornorm(&dist);
+  norme = ft_vectordot(&dist, &dist);
+  temp = norme * norme;
+  temp = 1 / sqrt(temp);
+  norme = temp * norme;
+  if (norme != 0)
+  {
+    all->raylightdist = ft_vectorsub(&all->spot->pos, &impact);
+    all->normraydist = ft_vectordot(&all->raylightdist, &all->raylightdist);
+    if (all->normraydist != 0)
+    {
+      all->raylightdir.x = all->raylightdist.x / norme;
+      all->raylightdir.y = all->raylightdist.y / norme;
+      all->raylightdir.z = all->raylightdist.z / norme;
+    }
+    all->intensitylight = ft_vectormul(&all->raylightdir, &dist);
+    lambert = (all->intensitylight.x * norme) + (all->intensitylight.y * norme) + (all->intensitylight.z * norme);
+    if (ft_shadow(all, impact, id) == 0)
+    {
+      light(all, d, lambert);
+      create_pixel(all, x, y, 0);
+    }
+    else if (ft_shadow(all, impact, id) == 1)
+    {
+      light(all, d, lambert);
+    	create_pixel(all, x, y, 1);
+    }
+  }
+}
+
+	/*t_vec position;
 	t_vec dist;
 	float d;
 	float lambert;
@@ -78,22 +126,22 @@ void	lambert(t_general *all, int x, int y, int id)
 		lambert += ft_clamp(ft_vectordot(&dist, &all->norm), 0.0, 1.0);
 		light(all, d, lambert);
 		create_pixel(all, x, y, 1);
-	}
+	}*/
 }
 
 void	create_pixel(t_general *all, int x, int y, int shadow)
 {
 	if (shadow == 0)
 	{
-		pxl2img(all, x, y, (((int)(all->finalcolor.r * 255) & 0xff) << 16) +
-			(((int)(all->finalcolor.g * 255) & 0xff) << 8) +
-			((int)(all->finalcolor.b * 255) & 0xff));
+		pxl2img(all, x, y, (((int)(all->finalcolor.r) & 0xff) << 16) +
+			(((int)(all->finalcolor.g) & 0xff) << 8) +
+			((int)(all->finalcolor.b) & 0xff));
 	}
 	if (shadow == 1)
 	{
-		all->colortampon = (((int)(all->finalcolor.r * 255) & 0xff) << 16) +
-			(((int)(all->finalcolor.g * 255) & 0xff) << 8) +
-			((int)(all->finalcolor.b * 255) & 0xff);
+		all->colortampon = (((int)(all->finalcolor.r) & 0xff) << 16) +
+			(((int)(all->finalcolor.g) & 0xff) << 8) +
+			((int)(all->finalcolor.b) & 0xff);
 		all->colortampon = (all->colortampon >> 1) & 8355711;
 		pxl2img(all, x, y, all->colortampon);
 	}

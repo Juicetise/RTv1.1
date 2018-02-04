@@ -36,11 +36,11 @@ static int	global_loop(t_general *all)
 		SDL_PollEvent(&all->event);
 		all->key = SDL_GetKeyboardState(NULL);
 		if (all->event.type == 256)
-			all->run = 0;
+			free_for_all(all);
 		if (all->event.window.type == SDL_WINDOWEVENT_CLOSE
 			|| all->event.key.keysym.sym == SDLK_ESCAPE
 			|| all->event.type == SDL_QUIT)
-			all->run = 0;
+			free_for_all(all);
 		draw(all);
 		SDL_UpdateWindowSurface(all->wn);
 		all->key = SDL_GetKeyboardState(NULL);
