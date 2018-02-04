@@ -14,10 +14,7 @@
 
 void	light(t_general *all, float d, float lambert)
 {
-  float a;
-
-  a = d;
-  //lambert = ft_clamp(lambert * 4.0 * d, 0.0, 1.0);
+  lambert = ft_clamp(lambert * 4.0 * d, 0.0, 1.0);
 	all->finalcolor.r = lambert *
 		((all->objcolor.r / 255) * (all->spot->color.r / 255)) * 255;
 	all->finalcolor.g = lambert *
@@ -60,7 +57,7 @@ int		ft_shadow(t_general *all, t_vec pos, int id)
 
 void	lambert(t_general *all, int x, int y, int id)
 {
-  t_vec impact;
+  /*t_vec impact;
   t_vec dist;
   float norme;
   float lambert;
@@ -77,32 +74,27 @@ void	lambert(t_general *all, int x, int y, int id)
   temp = norme * norme;
   temp = 1 / sqrt(temp);
   norme = temp * norme;
-  if (norme != 0)
+  all->raylightdist = ft_vectorsub(&all->spot->pos, &impact);
+  all->normraydist = ft_vectordot(&all->raylightdist, &all->raylightdist);
+  all->raylightdir.x = all->raylightdist.x / norme;
+  all->raylightdir.y = all->raylightdist.y / norme;
+  all->raylightdir.z = all->raylightdist.z / norme;
+  all->intensitylight = ft_vectormul(&all->raylightdir, &dist);
+  lambert = (all->intensitylight.x * norme) + (all->intensitylight.y * norme) + (all->intensitylight.z * norme);
+  if (ft_shadow(all, impact, id) == 0)
   {
-    all->raylightdist = ft_vectorsub(&all->spot->pos, &impact);
-    all->normraydist = ft_vectordot(&all->raylightdist, &all->raylightdist);
-    if (all->normraydist != 0)
-    {
-      all->raylightdir.x = all->raylightdist.x / norme;
-      all->raylightdir.y = all->raylightdist.y / norme;
-      all->raylightdir.z = all->raylightdist.z / norme;
-    }
-    all->intensitylight = ft_vectormul(&all->raylightdir, &dist);
-    lambert = (all->intensitylight.x * norme) + (all->intensitylight.y * norme) + (all->intensitylight.z * norme);
-    if (ft_shadow(all, impact, id) == 0)
-    {
-      light(all, d, lambert);
-      create_pixel(all, x, y, 0);
-    }
-    else if (ft_shadow(all, impact, id) == 1)
-    {
-      light(all, d, lambert);
-    	create_pixel(all, x, y, 1);
-    }
+    light(all, d, lambert);
+    create_pixel(all, x, y, 0);
   }
-}
+  else if (ft_shadow(all, impact, id) == 1)
+  {
+    light(all, d, lambert);
+  	create_pixel(all, x, y, 1);
+  }*/
 
-	/*t_vec position;
+
+
+	t_vec position;
 	t_vec dist;
 	float d;
 	float lambert;
@@ -117,16 +109,16 @@ void	lambert(t_general *all, int x, int y, int id)
 	ft_vectornorm(&dist);
 	if (ft_shadow(all, position, id) == 0)
 	{
-		//lambert += ft_clamp(ft_vectordot(&dist, &all->norm), 0.0, 1.0);
+		lambert += ft_clamp(ft_vectordot(&dist, &all->norm), 0.0, 1.0);
 		light(all, d, lambert);
 		create_pixel(all, x, y, 0);
 	}
 	else if (ft_shadow(all, position, id) == 1)
 	{
-		lambert += ft_clamp(ft_vectordot(&dist, &all->norm), 0.0, 1.0);
 		light(all, d, lambert);
 		create_pixel(all, x, y, 1);
-	}*/
+	}
+
 }
 
 void	create_pixel(t_general *all, int x, int y, int shadow)
