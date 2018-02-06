@@ -35,6 +35,7 @@ void	draw(t_general *all)
 		}
 		y++;
 	}
+	all->finished = 1;
 }
 
 void	init_ray(t_general *all, int x, int y)

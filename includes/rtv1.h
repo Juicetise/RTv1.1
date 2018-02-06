@@ -111,6 +111,7 @@ typedef struct		s_general
 	int			obj_nb;
 	int			spot_nb;
 	int			xspot;
+	int 		finished;
 }					t_general;
 
 float		inter_cylinder(t_general *all, t_vec ray, t_vec pos, int i);

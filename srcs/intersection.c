@@ -100,6 +100,8 @@ int		intersection(t_general *all)
 
 	i = 1;
 	all->t = 80000.0;
+	all->t0 = -1;
+	all->t1 = -1;
 	while (i <= all->obj_nb)
 	{
 		if (all->tab_obj[i]->type == 1)

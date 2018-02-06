@@ -35,6 +35,7 @@ void	init(t_general *all, char *str)
 	all->width = 800;
 	all->height = 800;
 	all->xspot = 0;
+	all->finished = 0;
 	init_tab_obj(all, str);
 	if (!(all->key = SDL_GetKeyboardState(NULL)))
 		return ;

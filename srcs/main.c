@@ -41,7 +41,8 @@ static int	global_loop(t_general *all)
 			|| all->event.key.keysym.sym == SDLK_ESCAPE
 			|| all->event.type == SDL_QUIT)
 			free_for_all(all);
-		draw(all);
+		if(!all->finished)
+			draw(all);
 		SDL_UpdateWindowSurface(all->wn);
 		all->key = SDL_GetKeyboardState(NULL);
 	}
