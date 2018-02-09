@@ -109,7 +109,7 @@ int		intersection(t_general *all)
 		else if (all->tab_obj[i]->type == 2)
 			dist = inter_sphere(all, all->dray, all->oray, i);
 		else if (all->tab_obj[i]->type == 3)
-			dist = inter_cone(all, all->dray, all->oray, i);
+			dist = inter_cone(all, all->dray, all->oray, i) - 1;
 		else if (all->tab_obj[i]->type == 4)
 			dist = inter_cylinder(all, all->dray, all->oray, i);
 		if (dist > 0.0001 && dist < all->t)

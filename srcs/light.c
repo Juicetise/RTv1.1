@@ -46,7 +46,7 @@ int		ft_shadow(t_general *all, t_vec pos, int id)
 			else if (all->tab_obj[i]->type == 2)
 				all->a = inter_sphere(all, dist2, pos, i) + 1;
 			else if (all->tab_obj[i]->type == 3)
-				all->a = inter_cone(all, dist2, pos, i) + 1;
+				all->a = inter_cone(all, dist2, pos, i) + 0.1;
 			else if (all->tab_obj[i]->type == 4)
 				all->a = inter_cylinder(all, dist2, pos, i) + 1;
 			if (all->a > 0.001 && all->a <= all->t)
