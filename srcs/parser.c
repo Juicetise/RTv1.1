@@ -26,20 +26,19 @@ void	init_tab_obj(t_general *all, char *src)
 	tab = ft_strsplit(line, ' ');
 	all->obj_nb = ft_atoi(tab[0]);
 	all->spot_nb = 1;
-	if (all->obj_nb == 0 || all->spot_nb == 0)
-		free_for_all(all);
 	i = 0;
 	all->tab_obj = malloc(sizeof(t_obj*) * (all->obj_nb + 1));
 	all->spot = malloc(sizeof(t_spot) * (all->spot_nb + 1));
 	while (get_next_line(fd, &line) > 0)
 	{
+		if (ft_isalnum(line[0]) == 0)
+			free_for_all(all);
 		if ((tab = ft_strsplit(line, ' ')))
 			add_obj_to_tab(all, tab, i++);
 	}
 	if (i != (all->obj_nb + all->spot_nb))
 		free_for_all(all);
-	ft_freetab(tab);
-	free(line);
+	ft_freetab(tab) ? free(line) : 0;
 }
 
 void	add_obj_to_tab(t_general *all, char **tab, int i)
@@ -54,7 +53,7 @@ void	add_obj_to_tab(t_general *all, char **tab, int i)
 		all->xspot = 1;
 		return ;
 	}
-	if (!tab || ft_tablen((void**)tab) < 10)
+	if (!tab || ft_tablen((void**)tab) < 10 || ft_tablen((void**)tab) > 11)
 		free_for_all(all);
 	obj = ft_memalloc(sizeof(t_obj));
 	obj->pos.x = ft_atof(tab[1]);
@@ -67,18 +66,23 @@ void	add_obj_to_tab(t_general *all, char **tab, int i)
 	obj->color.g = ft_atof(tab[8]);
 	obj->color.b = ft_atof(tab[9]);
 	obj->size = ft_atof(tab[10]);
-	select_type(tab, obj);
+	select_type(all, tab, obj);
 	all->tab_obj[i] = obj;
 }
 
-void	select_type(char **tab, t_obj *obj)
+void	select_type(t_general *all, char **tab, t_obj *obj)
 {
 	if (!ft_strcmp(tab[0], "Sphere"))
 		obj->type = 2;
 	else if (!ft_strcmp(tab[0], "Plane"))
 		obj->type = 1;
 	else if (!ft_strcmp(tab[0], "Cone"))
+	{
+		if (!((obj->size >= 0.1 && obj->size <= 0.9) ||
+			(obj->size >= 5.4 && obj->size <= 6.2)))
+			free_for_all(all);
 		obj->type = 3;
+	}
 	else if (!ft_strcmp(tab[0], "Cylinder"))
 		obj->type = 4;
 }

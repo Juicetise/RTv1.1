@@ -42,7 +42,7 @@ t_vec	norm_cone(t_general *all, t_vec pos, int id)
 
 	temp = ft_vectorscale(&all->tab_obj[id]->rot,
 		(ft_vectordot(&all->dray, &all->tab_obj[id]->rot) *
-		all->t0 + ft_vectordot(&all->dist, &all->tab_obj[id]->rot)));
+		all->t + ft_vectordot(&all->dist, &all->tab_obj[id]->rot)));
 	temp = ft_vectorscale(&temp, (1 + pow(tan(all->tab_obj[id]->size), 2)));
 	temp2 = ft_vectorsub(&pos, &all->tab_obj[id]->pos);
 	norm = ft_vectorsub(&temp2, &temp);
@@ -60,7 +60,7 @@ t_vec	norm_cylinder(t_general *all, t_vec pos, int id)
 
 	temp = ft_vectorscale(&all->tab_obj[id]->rot,
 		(ft_vectordot(&all->dray, &all->tab_obj[id]->rot) *
-		all->t0 + ft_vectordot(&all->dist, &all->tab_obj[id]->rot)));
+		all->t + ft_vectordot(&all->dist, &all->tab_obj[id]->rot)));
 	temp2 = ft_vectorsub(&pos, &all->tab_obj[id]->pos);
 	norm = ft_vectorsub(&temp2, &temp);
 	all->objcolor.r = all->tab_obj[id]->color.r;
@@ -73,14 +73,14 @@ t_vec	norm(t_general *all, t_vec pos, int id)
 {
 	t_vec	norm;
 
-	if (all->tab_obj[id]->type == 4)
-		norm = norm_cylinder(all, pos, id);
-	else if (all->tab_obj[id]->type == 3)
-		norm = norm_cone(all, pos, id);
-	else if (all->tab_obj[id]->type == 1)
+	if (all->tab_obj[id]->type == 1)
 		norm = norm_plane(all, id);
 	else if (all->tab_obj[id]->type == 2)
 		norm = norm_sphere(all, pos, id);
+	else if (all->tab_obj[id]->type == 3)
+		norm = norm_cone(all, pos, id);
+	else if (all->tab_obj[id]->type == 4)
+		norm = norm_cylinder(all, pos, id);
 	ft_vectornorm(&norm);
 	return (norm);
 }

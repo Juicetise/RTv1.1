@@ -98,12 +98,12 @@ int		intersection(t_general *all)
 	int		i;
 	int		tmp;
 
-	i = 1;
+	i = 0;
 	all->t = 80000.0;
-	all->t0 = -1;
-	all->t1 = -1;
-	while (i <= all->obj_nb)
+	while (i++ < all->obj_nb)
 	{
+		all->t0 = -1;
+		all->t1 = -1;
 		if (all->tab_obj[i]->type == 1)
 			dist = inter_plane(all, all->dray, all->oray, i);
 		else if (all->tab_obj[i]->type == 2)
@@ -117,7 +117,6 @@ int		intersection(t_general *all)
 			tmp = i;
 			all->t = dist;
 		}
-		i++;
 	}
 	return (tmp);
 }
