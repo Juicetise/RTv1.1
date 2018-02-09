@@ -30,26 +30,28 @@ int		ft_shadow(t_general *all, t_vec pos, int id)
 {
 	t_vec	dist2;
 	int		i;
+	int u;
 
+	u = id;
 	i = 1;
 	dist2 = ft_vectorsub(&all->spot->pos, &pos);
 	all->t = sqrtf(ft_vectordot(&dist2, &dist2));
 	ft_vectornorm(&dist2);
 	while (i <= all->obj_nb)
 	{
-		if (i != id)
-		{
+		//if (i != id)
+		//{
 			if (all->tab_obj[i]->type == 1)
 				all->a = inter_plane(all, dist2, pos, i);
 			else if (all->tab_obj[i]->type == 2)
-				all->a = inter_sphere(all, dist2, pos, i);
+				all->a = inter_sphere(all, dist2, pos, i) + 1;
 			else if (all->tab_obj[i]->type == 3)
-				all->a = inter_cone(all, dist2, pos, i);
+				all->a = inter_cone(all, dist2, pos, i) + 1;
 			else if (all->tab_obj[i]->type == 4)
-				all->a = inter_cylinder(all, dist2, pos, i);
-			if (all->a > 0.0001 && all->a < all->t)
+				all->a = inter_cylinder(all, dist2, pos, i) + 1;
+			if (all->a > 0.001 && all->a <= all->t)
 				return (1);
-		}
+		//}
 		i++;
 	}
 	return (0);
@@ -78,6 +80,7 @@ void	lambert(t_general *all, int x, int y, int id)
 	}
 	else if (ft_shadow(all, position, id) == 1)
 	{
+		lambert += ft_clamp(ft_vectordot(&dist, &all->norm), 0.0, 1.0);
 		light(all, d, lambert);
 		create_pixel(all, x, y, 1);
 	}

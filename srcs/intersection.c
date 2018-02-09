@@ -54,7 +54,7 @@ float	inter_cone(t_general *all, t_vec ray, t_vec pos, int i)
 		pow(ft_vectordot(&all->dist, &all->tab_obj[i]->rot), 2);
 	disc = all->b * all->b - 4 * all->a * all->c;
 	if (disc < 0)
-		return (-1);
+		return (80000.0);
 	all->t0 = (-all->b + sqrtf(disc)) / (2 * all->a);
 	all->t1 = (-all->b - sqrtf(disc)) / (2 * all->a);
 	if (all->t0 > all->t1)
